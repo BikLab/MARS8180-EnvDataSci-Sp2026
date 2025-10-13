@@ -22,7 +22,7 @@ Go around the room and every student will verbally answer the following question
 * What is the biggest thing you would like to get out of this course?
 * What will your capstone project be focused on? Do you have your own dataset or will you need to use one of the course datasets (from the Bik Lab)? 
 
-Take notes on student intros using this Google Doc: https://docs.google.com/document/d/1BXMG0OFYDTDuFr67lW8jxuFSf9EirwLXeCW-6HChJ60/edit?tab=t.0
+Take notes on student intros using this Google Doc: INSERT HERE
 
 ## 12:15-12:25pm - Introduce GACRC cluster and create an SSH key:
 
