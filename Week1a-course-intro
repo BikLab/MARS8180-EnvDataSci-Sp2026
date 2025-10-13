@@ -1,0 +1,31 @@
+## Week 1a: Course Introduction
+
+### 11:10am - 11:30am: Zoom troubleshooting (if needed) and Icebreaker activities
+
+In pairs, introduce yourselves by:
+  1) Explaining your graduate research in 3 words, and
+  2) Talking about one of the *best classes* you've ever taken - what was it about that course that made it so great? 
+
+After the icebreaker you will *introduce your partner to the rest of the group*
+
+### 11:30am - 11:45am: Review Syllabus 
+
+Final version here: INSERT HERE
+
+### 11:45am - 12:15pm: Student introductions, computer environment, research/course needs
+
+Go around the room and every student will verbally answer the following questions:
+
+* What computer do you have - Mac or PC?
+* What prior experience do you have with using Unix, R, and/or Python?
+* What area is your main -Omics interest: metabarcoding (amplicon / marker genes), metagenomics (shotgun sequencing) or metatranscriptomics (gene expression / RNA)?
+* What is the biggest thing you would like to get out of this course?
+* What will your capstone project be focused on? Do you have your own dataset or will you need to use one of the course datasets (from the Bik Lab)? 
+
+Take notes on student intros using this Google Doc: https://docs.google.com/document/d/1BXMG0OFYDTDuFr67lW8jxuFSf9EirwLXeCW-6HChJ60/edit?tab=t.0
+
+## 12:15-12:25pm - Introduce GACRC cluster and create an SSH key:
+
+GACRC overview slides here: INSERT HERE
+
+Creating an SSH key in Linux: https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
