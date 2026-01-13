@@ -34,4 +34,8 @@ All the info you will ever need is contained within the GACRC wiki: https://wiki
 
 GACRC overview slides here: https://wiki.gacrc.uga.edu/images/8/80/GACRC_Sapelo2_cluster_new_user_training_workshop_v10.8.pdf
 
+Globus - easiest way to transfer data to the GACRC, need to set up an account: https://wiki.gacrc.uga.edu/wiki/Globus#Getting_Started 
+
+<img width="875" height="501" alt="Screenshot 2026-01-12 at 7 44 26 PM" src="https://github.com/user-attachments/assets/33f713ef-2095-4cc2-ac84-ba8250b22a08" />
+
 Creating an SSH key in Linux: https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
