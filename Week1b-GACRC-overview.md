@@ -20,8 +20,11 @@ For example, our Bik Lab project directory is `/project/hmblab/`, work is `/work
 
 ### Key commands for submitting jobs
 
-`sbatch script.sh` - main command for submitting jobs (as shell script text files)
-`sq --me` - command to check what jobs you have running and have submitted to the queue 
+The GACRC using the Slurm queuing system, and some key commands you will use frequently are:
+
+* `sbatch script.sh` - main command for submitting jobs (as shell script text files)
+* `sq --me` - command to check what jobs you have running and have submitted to the queue
+* `scancel <JobID>` - command to cancel a Job; replace <JobID> with the numberical job number
 
 If you are seeing jobs with CPU efficiencies <70%, that is an indicator that you're requesting exceessive resources - may need to tweak your script header
 
