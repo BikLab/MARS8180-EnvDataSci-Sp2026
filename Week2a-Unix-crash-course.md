@@ -1,3 +1,10 @@
 ## Unix crash course
 
-Slide Deck Here: https://docs.google.com/presentation/d/1iG0N_pz0RlnTwX3nRenuzgNi_vypY78x8xoJOd_aSrE/edit
+Slide Deck Here: https://docs.google.com/presentation/d/1tbbJx-Hi70wtbSAG-XyiGDq-Imw3WMuI0uLksjiqUZw/edit?usp=sharing
+
+Class Plan:
+* Update on GACRC cluster training (3 students)
+* Review GACRC training and onboarding
+* SSH Keygen for teaching cluster - https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
+* Unix Crash Course and exercises (above slide deck)
+
