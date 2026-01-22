@@ -12,7 +12,7 @@
 * Raw data for today's Unix exercises will be posted here on the teaching cluster: `/work/mars8180/instructor_data`
 
 **Download files**
-* Download (https://swcarpentry.github.io/shell-novice/data/shell-lesson-data.zip)[https://swcarpentry.github.io/shell-novice/data/shell-lesson-data.zip] and move the file to your Desktop.
+* Download https://swcarpentry.github.io/shell-novice/data/shell-lesson-data.zip and move the file to your Desktop.
 * Unzip/extract the file. Let your instructor know if you need help with this step. You should end up with a new folder called shell-lesson-data on your Desktop.  
 
 
