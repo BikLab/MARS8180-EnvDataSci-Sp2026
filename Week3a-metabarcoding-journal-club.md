@@ -36,11 +36,11 @@ Follow GDoc questions (and take notes here) for this excercise: https://docs.goo
 
 #### Class Plan
 
-1:15 - 1:30: Lecture on sequencing technologies
-1:30 - 1:35: Q&A
-1:35 - 1:45: What is eDNA
-1:45 - 1:55: Exercise #1
-1:55 - 1:15: Sources of eDNA
-1:15 - 1:25: Exercise #2
-1:25 - 1:35: Group discussion and Wrap-up
+* 1:15 - 1:30: Lecture on sequencing technologies
+* 1:30 - 1:35: Q&A
+* 1:35 - 1:45: What is eDNA
+* 1:45 - 1:55: Exercise #1
+* 1:55 - 1:15: Sources of eDNA
+* 1:15 - 1:25: Exercise #2
+* 1:25 - 1:35: Group discussion and Wrap-up
 
