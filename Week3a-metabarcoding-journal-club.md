@@ -10,6 +10,8 @@ Perry WB, Pillay K, George P, Brennan G, Lowe A, Jones L, Holman L, Gibson T, de
 
 ---
 
+Slide Deck from Today's class: https://www.dropbox.com/scl/fi/zdzxu49sogvy1ufsia1ib/Week3a-Metabarcoding-JournalClub.pdf?rlkey=iq2yuq13h656lurl3uspo2ydm&dl=0
+
 ## Exercise 1: 
 
 #### In pairs, discuss the different sources of environmental DNA that may be present in your class dataset (e.g. the data you'll be working on, or another example marine dataset you're familiar with such as TARA Oceans, the Earth Microbiome Project,etc.)
@@ -29,3 +31,16 @@ Follow GDoc questions (and take notes here) for this excercise: https://docs.goo
 * What steps might you take to help you **assess (and/or mitigate) the sources of bias** you identified in your fieldwork/sampling? Wet lab and sequencing protocols?
 
 Follow GDoc questions (and take notes here) for this excercise: https://docs.google.com/document/d/1HijY66D_IFm7MMntNAhJ3tU4PrCgwRlI1WBFWwf3YAA/edit?usp=sharing
+
+---
+
+#### Class Plan
+
+1:15 - 1:30: Lecture on sequencing technologies
+1:30 - 1:35: Q&A
+1:35 - 1:45: What is eDNA
+1:45 - 1:55: Exercise #1
+1:55 - 1:15: Sources of eDNA
+1:15 - 1:25: Exercise #2
+1:25 - 1:35: Group discussion and Wrap-up
+
