@@ -2,6 +2,8 @@
 
 Your final exam will be a 15-minute oral presentation of your "capstone project" - a data analysis workflow using your own graduate research dataset (or a public/class dataset agreed upon with the instructor). For your presentation, please fill out the template slide deck labelled with your last name in this course GDoc folder: https://drive.google.com/drive/u/0/folders/1NSz3mCztFlGR_LwfSMQy_58fVe3m0McG
 
+Our final exam this year is **Thursday April 30, 2026 from 12pm-3pm**
+
 #### Grading Rubric for the final exam
 1. Dataset overview
 3. Overarching scientific questions
@@ -24,3 +26,14 @@ Slides #1-12 will be worth 8 points each
 
 Slide #13 will be worth 4 points
 * All or nothing - fill it out (full 4pts) or leave it blank (0 pts)
+
+---
+## Project Work Sessions
+
+In the course Google Doc folder (link above), please complete:
+
+1. The "Capstone Project Planning" worksheet - this is a planning exercise before we start data analysis
+2. Start compiling your project metadata into the "Project Metadata" spreadsheet - sample IDs, geographic coordinates, environmental parameters, variables, controls, etc.
+3. Data wrangling to QC your raw data and get everything into the correct format
+4. Get started with analysis!
+5. Complete capstone project slide deck (by the final exam date)
