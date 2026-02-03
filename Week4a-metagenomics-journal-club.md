@@ -8,7 +8,7 @@ New FN, Brito IL. (2020) What is metagenomics teaching us, and what is missed?. 
 
 ---
 
-Slide Deck from Today's class: INSERT HERE
+Slide Deck from Today's class: https://www.dropbox.com/scl/fi/ottbbsbuzesi3afce8t4d/Week4a-Metagenomics-journal-club.pdf?rlkey=l4j0ybeg75snpsy1jnwiqf8as&dl=0
 
 ## Exercise 1: 
 
