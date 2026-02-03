@@ -26,5 +26,5 @@ What lingering questions do you have about metagenomic data analysis? What aspec
 * 1:15 - 1:25: Exercise #1
 * 1:25 - 1:55: Metagenomics Journal Club (slide deck)
 * 1:55 - 2:05: Exercise #2
-
+* 2:05 - 2:25: Class discussion and bioinformatics pipeline workflow
 * 2:25 - 2:35: Group discussion and Wrap-up
