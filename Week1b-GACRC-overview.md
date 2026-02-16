@@ -2,6 +2,8 @@
 
 ### Initial setup
 
+Please watch this Linux basics playlist before training if you are not already familiar with Linux: https://kaltura.uga.edu/playlist/dedicated/176125031/1_uwkiealj/
+
 Windows Users:
 * If you are connecting from a Windows computer, please download and install PuTTY. You can find detailed instructions on how to download and install PuTTY on your Windows computer at https://wiki.gacrc.uga.edu/wiki/How_to_Install_and_Configure_PuTTY
 
@@ -29,3 +31,8 @@ The GACRC using the Slurm queuing system, and some key commands you will use fre
 If you are seeing jobs with CPU efficiencies <70%, that is an indicator that you're requesting exceessive resources - may need to tweak your script header
 
 ### Teaching cluster setup
+
+Please ensure that you can login to the Teaching Cluster before training:
+
+* Instructions for Mac (please use the hostname teach.gacrc.uga.edu): https://kaltura.uga.edu/playlist/dedicated/176125031/1_a6e4voao/1_5vozd2lt
+* Instructions for Windows computer (please use the hostname teach.gacrc.uga.edu): https://kaltura.uga.edu/media/t/1_s50lszs5/176125031
