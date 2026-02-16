@@ -34,5 +34,5 @@ If you are seeing jobs with CPU efficiencies <70%, that is an indicator that you
 
 Please ensure that you can login to the Teaching Cluster before training:
 
-* Instructions for Mac (please use the hostname teach.gacrc.uga.edu): https://kaltura.uga.edu/playlist/dedicated/176125031/1_a6e4voao/1_5vozd2lt
-* Instructions for Windows computer (please use the hostname teach.gacrc.uga.edu): https://kaltura.uga.edu/media/t/1_s50lszs5/176125031
+* Instructions for Mac (please use the hostname **teach.gacrc.uga.edu**): https://kaltura.uga.edu/playlist/dedicated/176125031/1_a6e4voao/1_5vozd2lt
+* Instructions for Windows computer (please use the hostname **teach.gacrc.uga.edu**): https://kaltura.uga.edu/media/t/1_s50lszs5/176125031
