@@ -185,3 +185,95 @@ In this script, the input file is the imported QIIME2 QZA filetype. This is the 
 
 After you submit this job, you can download the output file to your personal computer using PuTTy or the CommandLine. We will go over the interactive quality plots in class. 
 
+### Removing adapter sequences
+Now, we will run script `03-remove-primers-adapters-cutadapt.sh` to remove primers from our dataset. This is an important part of our computational pipeline. 
+
+```$ scripts 03-remove-primers-adapters-cutadapt.sh
+
+#!/bin/sh
+
+#SBATCH --job-name="cutadapt"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem-per-cpu=5G
+#SBATCH --time=01:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=END,FAIL
+#SBATCH -e 03-remove-primers.err-%N
+#SBATCH -o 03-remove-primers.out-%N
+
+# load module
+module load QIIME2/2025.10-amplicon
+
+# set paths to project directory and data subdirectory
+INPUT="/work/mars8180/instructor_data/metabarcoding-16S/analysis/01-16S-rRNA-metabarcoding-data.qza"
+OUTPUT="/work/mars8180/instructor_data/metabarcoding-16S/analysis/03-16S-rRNA-sans-primers-adapters.qza"
+
+# use qiime tools to import data
+qiime cutadapt trim-paired \
+  --i-demultiplexed-sequences ${INPUT}\
+  --p-front-f GTGCCAGCMGCCGCGGTAA \
+  --p-front-r GGACTACHVGGGTWTCTAAT \
+  --p-error-rate 0.1 \
+  --o-trimmed-sequences ${OUTPUT} \
+  --p-cores 12
+```
+
+In this script, we specify the forward (5'-GTGCCAGCMGCCGCGGTAA-3') and reverse sequences (5'-GGACTACHVGGGTWTCTAAT-3') using the appropriate flags `--p-front-f` and `--p-front-r`. We also need to specify the output file for our trimmed sequences and the error rate (0.1 if the default error rate for the cutadapt software). 
+
+Let's replace the `INPUT` and `OUTPUT` filepaths. The input is the raw data in the QIIME2 QZA format. 
+
+Now, we can visualize the data to see if our data changed using the script `04-visualize-data-quality.sh`
+
+### Desnoising sequences using DADA2 
+DADA2 is a denoising algorithm that using estimated error-rates to correct and dereplicate your dataset. There are several denoising algorithims, but we prefer to use this because:
+1. It estimates error rates based on the FASTQ PHRED scores and does not assume an equal error rate across runs. This is important because error-rates vary depending on the sample quality, library prep, and inclusion of sequencing controls. 
+2. Other sequencing algorithms are too stringent and remove rare taxa that can impact downstream data analysis. 
+
+Let's take a look at the script:
+
+```
+$ cat scripts/03-remove-primers-adapters-cutadapt.sh
+
+#!/bin/sh
+
+#SBATCH --job-name="denoise-asvs"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem-per-cpu=5G
+#SBATCH --time=01:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=END,FAIL
+#SBATCH -e 04-denoise-asvs.err-%N
+#SBATCH -o 04-denoise-asvs.out-%N
+
+# load module
+module load QIIME2/2025.10-amplicon
+
+# set paths to project directory and data subdirectory
+INPUT="/work/mars8180/instructor_data/metabarcoding-16S/analysis/03-16S-rRNA-sans-primers-adapters.qza"
+OUTPUT="/work/mars8180/instructor_data/metabarcoding-16S/analysis"
+
+# use qiime tools to import data
+qiime dada2 denoise-paired \
+  --i-demultiplexed-seqs ${INPUT} \
+  --p-trunc-len-f 220 \
+  --p-trunc-len-r 235 \
+  --o-representative-sequences ${OUTPUT}/05-16S-rRNA-denoise-dada2-rep-seq.qza \
+  --o-table ${OUTPUT}/05-16S-rRNA-denoise-dada2-feature-table.qza \
+  --o-denoising-stats ${OUTPUT}/05-16S-rRNA-denoise-dada2-stats.qza \
+  --o-base-transition-stats ${OUTPUT}/05-16S-rRNA-denoise-dada2-transition-stats.qza \
+  --p-n-threads 12
+```
+
+Based on the data quality plot, I have decided to truncate the forward and reverse reads at 235bp and 215bp, respectively. The quality at the 5' end was high for both the forward and reverse reads, so I will not trim the data. 
+
+We will have three output files:
+* `05-16S-rRNA-denoise-dada2-rep-seq.qza`: The representative sequences for each ASV
+* `05-16S-rRNA-denoise-dada2-feature-table.qza`: A table with counts of how many times each ASV (row) was observed across each sample (column). 
+* `05-16S-rRNA-denoise-dada2-stats.qza`: An in-depth comparison at how many reads were dropped at each step for DADA2. 
+* `05-16S-rRNA-denoise-dada2-transition-stats.qza`; A table listing the transition rates of each ordered pair of nucleotides at each quality score.
