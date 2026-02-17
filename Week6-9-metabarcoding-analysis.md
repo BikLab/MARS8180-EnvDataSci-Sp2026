@@ -54,9 +54,9 @@ qiime tools import \
 
 We are using a manifest file to import our data into a QIIME2 QZA format. The manifest file is a tab-delimited file located in the metadata directory with 3 columns, `sample-id`, `forward-absolute-filepath`, and `reverse-absolute-filepath`. We can use head to see the first 10 lines. 
 
-`$ head metadata/2026-01-15-BOBA-16S-fastq-manifest-file.txt`
-
 ```
+$ head metadata/2026-01-15-BOBA-16S-fastq-manifest-file.txt
+
 sample-id	forward-absolute-filepath	reverse-absolute-filepath
 16S-BOBA-Blank.1	$DATA/16S-BOBA-Blank.1-1.fastq.gz	$DATA/16S-BOBA-Blank.1-2.fastq.gz
 16S-BOBA-Blank.10	$DATA/16S-BOBA-Blank.10-1.fastq.gz	$DATA/16S-BOBA-Blank.10-2.fastq.gz
