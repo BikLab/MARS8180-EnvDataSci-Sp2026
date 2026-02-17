@@ -19,9 +19,9 @@ now use `scp` to copy the data files, metadata, and scripts from the teaching cl
 ### Import data 
 Let's cat the first script `01-import-raw-data.sh`
 
-`$ cat scripts/01-import-raw-data.sh`
-
 ```
+$ cat scripts/01-import-raw-data.sh
+
 #!/bin/sh
 
 #SBATCH --job-name="import-data"
@@ -70,4 +70,43 @@ sample-id	forward-absolute-filepath	reverse-absolute-filepath
 ```
 
 Notice that the filepath contains `$DATA`. This is an environment path that we define in the beginning of our script `export DATA="/work/mars8180/instructor_data/metabarcoding-16S/raw-data/"`
+
+Let's update the paths in the beginning of the file to the correct aboslute paths that are located in your `mars8180-class-data` directory.
+
+### Visualizing data
+Now, we can run the second script `02-visualize-raw-data.sh` to visualize the data quality of the metabarcoding dataset. Once again, change the file paths so that they match the location in your directory. 
+
+```
+$ cat scripts/02-visualize-raw-data.sh
+
+#!/bin/sh
+
+#SBATCH --job-name="viz-data"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=12G
+#SBATCH --time=01:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=END,FAIL
+#SBATCH -e 02-visualize-data.err-%N
+#SBATCH -o 02-visualize-data.out-%N
+
+# load module
+module load QIIME2/2025.10-amplicon
+
+# set paths to project directory and data subdirectory
+INPUT="/work/mars8180/instructor_data/metabarcoding-16S/analysis/01-16S-rRNA-metabarcoding-data.qza"
+OUTPUT="/work/mars8180/instructor_data/metabarcoding-16S/analysis/02-16S-rRNA-visualize-data-quality.qzv"
+
+# use qiime tools to import data
+qiime demux summarize \
+  --i-data ${INPUT} \
+  --o-visualization ${OUTPUT}
+```
+
+In this script, the input file is the imported QIIME2 QZA filetype. This is the output of our first script `01-import-raw-data.sh`. The output is a QIIME2 QZV filetype. It's similar to QZA, except that it is made to visualize data using the QIIME2 Website: [https://view.qiime2.org](https://view.qiime2.org)
+
+After you submit this job, you can download the output file to your personal computer using PuTTy or the CommandLine. 
 
