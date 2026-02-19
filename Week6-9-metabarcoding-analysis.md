@@ -1,5 +1,22 @@
 # Before we get started
 
+### Transferring Data files
+
+All scripts, data, and metadata files for this section are hosted on the teaching cluster in the following file path: `/work/mars8180/instructor_data/metabarcoding-16S/` (you can always recopy this directory and start over if you make any mistakes on Sapelo2)
+
+First, we will need to set up our directory structure on Sapelo2 in your `/home/myID/` directory, using the following commands:
+
+1. Make an overall course folder in this location using the command `mkdir mars8180-course`
+2. Next, move into that directory using `cd mars8180-course`
+3. Now we will make a new folder for our script outputs using the command `mkdir analysis-results`
+4. Next, we will copy three directories over from the teaching cluster using the `scp` file transfer command, as following:
+
+`scp -r myid@teach.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/scripts .`
+`scp -r myid@teach.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/metadata .`
+`scp -r myid@teach.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/raw-data .`
+
+The `scp` command always needs an origin where the files are (the teaching cluster, in this instance) and a destination location (here, we specify ` . ` to indicate that the files should be copied to the current folder). The `-r` flag specifies that that it should recursively roll down the list of files and directories and copy everything contained within in the origin folder.
+
 ### Demultiplex Data 
 The sequencing facility will give you your data as 1) multiplexed or 2) demultiplexed sequences. If your sequencing data is a multiplexed file, all of your sample sequencing data will be located in a single file. Demultiplexing is a process of seperating your samples using your unique sequencing barcodes. 
 
