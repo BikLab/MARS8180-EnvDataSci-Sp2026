@@ -10,10 +10,9 @@ First, we will need to set up our directory structure on Sapelo2 in your `/home/
 2. Next, move into that directory using `cd mars8180-course`
 3. Now we will make a new folder for our script outputs using the command `mkdir analysis-results`
 4. Next, we will copy three directories over from the teaching cluster using the `scp` file transfer command, as following:
-
-`scp -r myid@teach.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/scripts .`
-`scp -r myid@teach.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/metadata .`
-`scp -r myid@teach.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/raw-data .`
+5. `scp -r myid@teach.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/scripts .`
+6. `scp -r myid@teach.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/metadata .`
+7. `scp -r myid@teach.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/raw-data .`
 
 The `scp` command always needs an origin where the files are (the teaching cluster, in this instance) and a destination location (here, we specify ` . ` to indicate that the files should be copied to the current folder). The `-r` flag specifies that that it should recursively roll down the list of files and directories and copy everything contained within in the origin folder.
 
