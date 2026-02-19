@@ -17,6 +17,9 @@ First, we will need to set up our directory structure on Sapelo2 in your `/home/
 The `scp` command always needs an origin where the files are (the teaching cluster, in this instance) and a destination location (here, we specify ` . ` to indicate that the files should be copied to the current folder). The `-r` flag specifies that that it should recursively roll down the list of files and directories and copy everything contained within in the origin folder.
 
 ### Demultiplex Data 
+
+After completing the above steps, your filepath for your raw data should be located on Sapelo2 at the following file path `/home/myID/mars8180-course/metabarcoding-16S/raw-data` - if you look in that directory 
+
 The sequencing facility will give you your data as 1) multiplexed or 2) demultiplexed sequences. If your sequencing data is a multiplexed file, all of your sample sequencing data will be located in a single file. Demultiplexing is a process of seperating your samples using your unique sequencing barcodes. 
 
 **If the sequencing facility demultiplexes your sequencing data, they will also send you the multiplexed raw sequencing data**
