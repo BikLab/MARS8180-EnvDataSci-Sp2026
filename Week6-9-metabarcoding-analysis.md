@@ -92,7 +92,7 @@ GTGCATGTCTCAGTATAAGTGTTTCACTGCGAAACTGCGAATGGCTCATTAAAACAGTTATAGTTTCCATGTCAGTTGTT
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC5CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC*CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC*
 ```
 
-If we look in our `raw-data` directory for the metabarcoding course folder, and `ls` the files, we can see that our class dataset is paired-end Illumina samples which have already been demultiplexed. In this case, you will see two FASTQ files for each sequence, where the same sample name (for example, `16S-BOBA-MM.B.3.2`) has two files each (`-1.fastq.gz` for forward Illumina reads and `-2.fastq.gz` for reverse Illumina reads)
+If we look in our `raw-data` directory for the metabarcoding course folder, and `ls` the files, we can see that our class dataset is paired-end Illumina samples which have already been demultiplexed. In this case, you will see two FASTQ files for each sample, where the same sample ID (for example, `16S-BOBA-MM.B.3.2`) has two files associated with it which are the read pairs (`-1.fastq.gz` for forward Illumina reads and `-2.fastq.gz` for reverse Illumina reads).
 
 1. Forward sequences (`16S-BOBA-MM.B.3.2-1.fastq.gz`)
 2. Reverse sequences (`16S-BOBA-MM.B.3.2-2.fastq.gz`)
