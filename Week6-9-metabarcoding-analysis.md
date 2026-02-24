@@ -296,3 +296,143 @@ We will have three output files:
 * `05-16S-rRNA-denoise-dada2-feature-table.qza`: A table with counts of how many times each ASV (row) was observed across each sample (column). 
 * `05-16S-rRNA-denoise-dada2-stats.qza`: An in-depth comparison at how many reads were dropped at each step for DADA2. 
 * `05-16S-rRNA-denoise-dada2-transition-stats.qza`; A table listing the transition rates of each ordered pair of nucleotides at each quality score.
+
+### Assigning Taxonomy using BLAST+
+Next, we are going to assign taxonomy using the BLAST+ software. Here, we will use the SILVA Ref Database clustered at 99% sequence similarity. There are many reference databases out there, and your choice of database will depend on several factors, such as : 
+1. Your organism(s) of interested 
+2. How robust the reference database is
+
+Greengenes is another commonly used database for bacteria; however, it still has less unique sequences than the SILVA database impacting the classification of ASVs at lower taxonomic levels (family/genus).
+
+Let's take a look at the script:
+
+```
+$ cat 06-assign-taxonomy-blast.sh
+
+#!/bin/sh
+#SBATCH --job-name="assign-taxonomy"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem-per-cpu=4G
+#SBATCH --time=3-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e 06-assign-taxonomy.err-%N
+#SBATCH -o 06-assign-taxonomy.out-%N
+
+module load QIIME2/2025.10-amplicon
+
+INPUT=/work/mars8180/instructor_data/metabarcoding-16S/analysis/05-16S-rRNA-denoise-dada2-rep-seq.qza
+REFSEQ=/work/mars8180/instructor_data/metabarcoding-16S/database/SILVA138-nr99_sequences_16S.qza
+REFTAX=/work/mars8180/instructor_data/metabarcoding-16S/database/SILVA138-nr99_taxonomy_16S.qza
+OUTPUT=/work/mars8180/instructor_data/metabarcoding-16S/analysis/06-16S-rRNA-taxonomy-assignment-blast.qza
+SEARCH=/work/mars8180/instructor_data/metabarcoding-16S/analysis/06-16S-rRNA-blast-search-results.qza
+
+qiime feature-classifier classify-consensus-blast \
+  --i-query ${INPUT} \
+  --i-reference-taxonomy ${REFTAX} \
+  --i-reference-reads ${REFSEQ} \
+  --p-maxaccepts 5 \
+  --p-perc-identity 0.90 \
+  --o-classification ${OUTPUT} \
+  --o-search-results ${SEARCH} \
+  --p-num-threads 12
+```
+
+To run this script, we need 3 input files: 
+* `05-16S-rRNA-denoise-dada2-rep-seq.qza`: The representative sequences for each ASV
+* `SILVA138-nr99_sequences_16S.qza`: Representative sequences from reference database. 
+* `SILVA138-nr99_taxonomy_16S.qza`: Taxonomoic labels of the representative sequences from reference database.
+
+We will have two outputs:  
+* `06-16S-rRNA-blast-search-results.qza`: Search results of the top X hits for each ASV query sequence. 
+* `06-16S-rRNA-taxonomy-assignment-blast.qza`: The final taxonomic classification of the ASV query sequence.
+
+### Constructing phylogenetic tree using the short-length ASV sequences
+Building a phylogenetic tree has several steps: 
+1. Create a sequence alignment using all ASVs
+2. Mask (remove) any positions that are phylogenetically uninformative.
+3. Use the masked alignment to contruct the phylogenetic tree
+4. Root the tree 
+
+There are several tools and pipelines you can use in QIIME2. Here, we will use the `align-to-tree-mafft-fasttree` pipeline, which uses **MAFFT** to align sequences and **fasttree** to approximate maximum-likelihood trees. Other tools are more time and computationaly expensive, but they yield higher quality trees. We will use fasttree in this class, since it is very fast. But, for your final analysis we recomend using IQ-TREE or RaXML. 
+
+```
+$ cat scripts/07-phylogeny-fasttree.sh
+
+#!/bin/sh
+#SBATCH --job-name="phylogeny"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem-per-cpu=4G
+#SBATCH --time=3-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e 07-phylogenetic-tree.err-%N
+#SBATCH -o 07-phylogenetic-tree.out-%N
+
+module load QIIME2/2025.10-amplicon
+
+INPUT=/work/mars8180/instructor_data/metabarcoding-16S/analysis/05-16S-rRNA-denoise-dada2-rep-seq.qza
+OUTPUT=/work/mars8180/instructor_data/metabarcoding-16S/analysis
+
+qiime phylogeny align-to-tree-mafft-fasttree \
+  --i-sequences ${INPUT} \
+  --o-alignment ${OUTPUT}/07-16S-rRNA-fasttree-alignment.qza \
+  --o-masked-alignment ${OUTPUT}/07-16S-rRNA-fasttree-masked-alignment.qza \
+  --o-tree ${OUTPUT}/07-16S-rRNA-fasttree-unrooted-tree.qza \
+  --o-rooted-tree ${OUTPUT}/07-16S-rRNA-fasttree-midrooted-tree.qza \
+  --p-n-threads 12
+```
+
+### Export data into a format for R
+QIIME2 files are zipped folders that contain the data and provinance information (what was done to the data). We need to export this to have filetypes that we can use to visualize and analyze in R. 
+
+```
+$ cat 08-extract-qiime2-data.sh
+
+#!/bin/sh
+#SBATCH --job-name="extract-data"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=12G
+#SBATCH --time=01:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e 08-extract-data.err-%N
+#SBATCH -o 08-extract-data.out-%N
+
+module load QIIME2/2024.10-amplicon
+
+REPSEQ=/work/mars8180/instructor_data/metabarcoding-16S/analysis/05-16S-rRNA-denoise-dada2-rep-seq.qza
+TABLE=/work/mars8180/instructor_data/metabarcoding-16S/analysis/05-16S-rRNA-denoise-dada2-feature-table.qza
+TAXA=/work/mars8180/instructor_data/metabarcoding-16S/analysis/06-16S-rRNA-taxonomy-assignment-blast.qza
+TREE=/work/mars8180/instructor_data/metabarcoding-16S/analysis/07-fasttree-midrooted-tree.qza
+OUT=/work/mars8180/instructor_data/metabarcoding-16S/analysis/
+
+module load QIIME2
+
+qiime tools export \
+  --input-path ${REPSEQ} \
+  --output-path ${OUT}/08-representative-sequences
+
+qiime tools export \
+  --input-path ${TABLE} \
+  --output-path ${OUT}/08-asv-table
+
+qiime tools export \
+  --input-path ${TAXA} \
+  --output-path ${OUT}/08-taxonomy-classification
+
+qiime tools export \
+  --input-path ${TREE} \
+  --output-path ${OUT}/08-midrooted-tree
+```
+
+
