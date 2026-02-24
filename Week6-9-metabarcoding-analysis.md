@@ -93,22 +93,6 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 ```
 
 # 16S Metabarcoding Analysis 
-Before we get started, let's copy our data over to a new directory `mars8180-class-data`.'
-
-Login to Sapelo2 using PuTTy and create your directory using the following command: 
-
-```
-$ mkdir mars8180-class-data
-$ cd mars8180-class-data
-```
-
-now use `scp` to copy the data files, metadata, and scripts from the teaching cluster to Sapelo2. 
-
-`$ scp -r userid@txfer.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/scripts`
-
-`$ scp -r userid@txfer.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/metadata`
-
-`$ scp -r userid@txfer.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/raw-data`
 
 ### Import data 
 Let's cat the first script `01-import-raw-data.sh`
