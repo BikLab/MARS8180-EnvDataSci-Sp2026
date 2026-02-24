@@ -75,10 +75,10 @@ CCCFFFFFGHHHHJIJJJJIJJJIIJJJJIIIJJGFIIIJEDDFEGGJIFHHJIJJDECCGGEGIIJFHFFFACD:BBBD
 From lowest (99.999999% probability of an error) to highest quality score (0.0001% probability of an error): 
 ```!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHI```
 
-Lets use the following command to get the first 8 lines of one of our ddt-samples. 
+Lets use the following command to get the first 8 lines of one of our metabarcoding samples. 
 
 ```
-zcat ddt-raw-fastq/DDT.10.1_S1258_L001_R1_001.fastq.gz | head -n 8
+zcat raw-data/16S-BOBA-MM.B.3.2-1.fastq.gz | head -n 8
 ```
 
 ```
