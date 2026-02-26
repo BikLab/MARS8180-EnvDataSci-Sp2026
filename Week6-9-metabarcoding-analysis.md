@@ -425,4 +425,54 @@ qiime tools export \
   --output-path ${OUT}/08-midrooted-tree
 ```
 
+## Downloading our data to our personal computer
+
+Before we download our ASV table, taxonomy table, and tree onto our personal computer, we are going to create a projects directory on our personal laptop. On your desktop, create a folder called `ddt-project` where we will store our QIIME2 files and our downstream data analysis. 
+
+The file path will vary for each user and computing system, so make sure you are using the file path on your computer. 
+
+```
+$ cd /Users/userid/Desktop
+$ mkdir metabarcoding-16S
+$ cd metabarcoding-16S
+$ mkdir results data scripts metadata
+```
+
+Now, we can download our data using the scp command.
+
+**Download the metadata (`2025-01-03-ddt-metadata.csv`)** 
+
+```
+scp userid@txfer.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/2026-02-25-16S-rRNA-metadata.txt metadata/
+```
+
+**Download the ASV Table (`05-dada2-feature-table.qza`)** 
+
+```
+scp userid@txfer.gacrc.uga.edu:/path/to/directory/05-16S-rRNA-denoise-dada2-feature-table.qza results/
+```
+
+**Download the Taxonomy Table (`06-taxonomy-blast-90-1.qza`)** 
+
+```
+scp userid@txfer.gacrc.uga.edu:/path/to/directory/06-16S-rRNA-taxonomy-assignment-blast.qza results/
+```
+
+**Download the Phylogenetic Tree (`07-fasttree-midrooted-tree.qza`)** 
+
+```
+scp userid@txfer.gacrc.uga.edu:/path/to/directory/07-16S-rRNA-fastree-midrooted-tree.qza results/
+```
+
+## Starting an R project
+
+Now, we can start an R project in the directory we just created.
+
+Generally, for metabarcoding datasets we will need to work with **four** different files:
+1. **ASV table** - Our table containing Amplicon Sequence Variants, generated in DADA2 (where each row is an ASV, and columns are our sample names showing the presence/absence (and read counts if present) of each ASV across each sample).
+2. **Taxonomy assignments** - a list of database matches (e.g. from BLAST), or classifier results (e.g. from the QIIME2 classifier) for each row (ASV) in your ASV table
+3. **Metadata mapping file** - your tab-delimited (or excel) table with your sample names and all the corresponding sample site data, environmental metadata, etc. (e.g. depth, geographic coordinates, sampling date, experimental condition, etc.)
+4. **Phylogenetic tree** - for 16S or 18S rRNA metabarcoding datasets, you will build a phylogenetic tree showing evolutionary relationships using a multiple sequence alignment of your ASV nucleotide sequences. Many downstream diversity stats will use "phylogenetic distance" (total branch length between two ASVs on a tree) as a metric within the mathematical equation. A tree is not needed for all analyses, and cannot be generated for some metabarcoding loci (e.g. COI, mitochondrial loci evolve too fast and trees are generally meaningless except perhaps for population-level analysis within one species)
+
+Let's install and import the R packages we are going to use for our downstream analysis. **QIIME2R** allows us to easily import the artifact files into a "phyloseq" object. **Phyloseq** let's us manipulate our metabarcoding dataset. **Decontam** is a package that allows us to use our blank to remove potential contaminants. **Tidyr** and **ggplot** allow us to easily manipulate dataframes and create publication ready plots, respectively.
 
