@@ -427,7 +427,7 @@ qiime tools export \
 
 ## Downloading our data to our personal computer
 
-Before we download our ASV table, taxonomy table, and tree onto our personal computer, we are going to create a projects directory on our personal laptop. On your desktop, create a folder called `ddt-project` where we will store our QIIME2 files and our downstream data analysis. 
+Before we download our ASV table, taxonomy table, and tree onto our personal computer, we are going to create a projects directory on our personal laptop. On your desktop, create a folder called `metabarcoding-16` where we will store our QIIME2 files and our downstream data analysis. 
 
 The file path will vary for each user and computing system, so make sure you are using the file path on your computer. 
 
