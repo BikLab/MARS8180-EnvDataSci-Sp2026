@@ -28,14 +28,14 @@ metadata <- read.delim2("metadata/2026-02-25-16S-rRNA-metadata.txt", sep = "\t",
 ```
 
 ## Extract data from files
-```{r}
+``` r
 asv_df <- asvs$data # we can view and save the actual data by specifying '$'
 taxonomy_df <- taxonomy$data # save taxonomy info as a dataframe
 phylo_tree <- tree$data # tree data is stored as a phyloseq object
 ```
 
 ## Fix taxonomy strings
-```{r}
+``` r
 taxonomy_fixed_df <- taxonomy_df %>% separate_wider_delim(Taxon, delim = ";", names_sep = "", too_few = "align_start") # split taxonomy into different columns 
 taxonomy_fixed_df[is.na(taxonomy_fixed_df)] <- "Unassigned" # rename NAs into unassigned
 head(taxonomy_fixed_df) # few the first 5 lines
@@ -50,7 +50,7 @@ head(taxonomy_matrix)
 
 ## Merge files into phyloseq object
 
-```{r}
+``` r
 physeq_asv <- otu_table(asv_df, taxa_are_rows = T) # convert into phyloseq object
 physeq_tax <- tax_table(taxonomy_matrix) # convert into phyloseq object
 physeq_meta <- sample_data(metadata) # convert into phyloseq object
@@ -62,7 +62,7 @@ phylo_object_tree # get summary of the data
 ```
 
 ## Remove contaminant sequences
-```{r}
+``` r
 sample_data(phylo_object_tree)$is.neg <- sample_data(phylo_object_tree)$SampleType == "Control" # create a sample-variable for contaminants
 phylo_object_contaminants <- isContaminant(phylo_object_tree, method = "prevalence", neg="is.neg", threshold=0.1, detailed = TRUE, normalize = TRUE) # detect contaminants based on control samples and their ASV prevalance
 table(phylo_object_contaminants$contaminant) # check number of ASVs that are contaminents
@@ -84,7 +84,7 @@ phylo_obj_tree_sans_contam_sans_controls
 ```
 
 ## Generate taxonomy barplots
-```{r}
+``` r
 # We are are using the fantaxtic package to create a nest taxonomy barplot
 top_nested <- nested_top_taxa(phylo_obj_tree_sans_contam_sans_controls,
                               top_tax_level = "Taxon2",
@@ -115,7 +115,7 @@ ggsave(filename = "figures/2026-02-25-taxonomy-barplot-top-taxa.png", dpi = 300,
 ```
 
 ## Alpha diversity analysis
-```{r}
+``` r
 # We can estimate diversity using phyloseq
 # Let's estimate number of observed ASVs 
 alpha_div_observed <- phyloseq::estimate_richness(phylo_obj_tree_sans_contam_sans_controls, measures = "Observed") # calculate alpha diversity
@@ -144,7 +144,7 @@ alpha_div_observed_metadata
 ```
 
 ### Beta diversity analysis
-```{r}
+``` r
 # normalize dataset by relative abundance
 phylo_obj_tree_sans_contam_sans_controls_relab <- transform_sample_counts(phylo_obj_tree_sans_contam_sans_controls, function(x) x / sum(x) )
 
