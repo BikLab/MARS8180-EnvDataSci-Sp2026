@@ -20,7 +20,7 @@ library(fantaxtic)
 ```
 
 ## Import data 
-```{r}
+``` r
 asvs <- read_qza("data/05-16S-rRNA-denoise-dada2-feature-table.qza")
 taxonomy <- read_qza("data/06-16S-rRNA-taxonomy-assignment-blast.qza")
 tree <- read_qza("data/07-16S-rRNA-fastree-midrooted-tree.qza")
