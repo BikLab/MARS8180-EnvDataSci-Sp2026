@@ -440,25 +440,25 @@ $ mkdir results data scripts metadata
 
 Now, we can download our data using the scp command.
 
-**Download the metadata (`2025-01-03-ddt-metadata.csv`)** 
+**Download the metadata (`2026-02-25-16S-rRNA-metadata.txt`)** 
 
 ```
 scp userid@txfer.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/2026-02-25-16S-rRNA-metadata.txt metadata/
 ```
 
-**Download the ASV Table (`05-dada2-feature-table.qza`)** 
+**Download the ASV Table (`05-16S-rRNA-denoise-dada2-feature-table.qza`)** 
 
 ```
 scp userid@txfer.gacrc.uga.edu:/path/to/directory/05-16S-rRNA-denoise-dada2-feature-table.qza results/
 ```
 
-**Download the Taxonomy Table (`06-taxonomy-blast-90-1.qza`)** 
+**Download the Taxonomy Table (`06-16S-rRNA-taxonomy-assignment-blast.qza`)** 
 
 ```
 scp userid@txfer.gacrc.uga.edu:/path/to/directory/06-16S-rRNA-taxonomy-assignment-blast.qza results/
 ```
 
-**Download the Phylogenetic Tree (`07-fasttree-midrooted-tree.qza`)** 
+**Download the Phylogenetic Tree (`07-16S-rRNA-fastree-midrooted-tree.qza`)** 
 
 ```
 scp userid@txfer.gacrc.uga.edu:/path/to/directory/07-16S-rRNA-fastree-midrooted-tree.qza results/
