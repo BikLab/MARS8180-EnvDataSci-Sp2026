@@ -443,7 +443,7 @@ Now, we can download our data using the scp command.
 **Download the metadata (`2026-02-25-16S-rRNA-metadata.txt`)** 
 
 ```
-scp userid@txfer.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/2026-02-25-16S-rRNA-metadata.txt metadata/
+scp userid@txfer.gacrc.uga.edu:/work/mars8180/instructor_data/metabarcoding-16S/metadata/2026-02-25-16S-rRNA-metadata.txt metadata/
 ```
 
 **Download the ASV Table (`05-16S-rRNA-denoise-dada2-feature-table.qza`)** 
