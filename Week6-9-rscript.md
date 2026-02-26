@@ -1,6 +1,6 @@
 ## Install software packages
 
-```{r}
+``` r
 if (!requireNamespace("devtools", quietly = TRUE)){install.packages("devtools")}
 if (!"devtools" %in% installed.packages()){install.packages("devtools")}
 
