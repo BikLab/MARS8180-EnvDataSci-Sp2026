@@ -4,7 +4,7 @@
 if (!requireNamespace("devtools", quietly = TRUE)){install.packages("devtools")}
 if (!"devtools" %in% installed.packages()){install.packages("devtools")}
 
-BiocManager::install("qiime2R") # install decontam
+BiocManager::install("qiime2R") # install qiime2R
 BiocManager::install("decontam") # install decontam
 BiocManager::install("phyloseq") # install phyloseq
 BiocManager::install("ggplot2") # install ggplot2
