@@ -1,5 +1,5 @@
 # Overview of metabarcoding workflow
-[MARS8180 Bioinformatics Workflows-2.pdf](https://github.com/user-attachments/files/25701411/MARS8180.Bioinformatics.Workflows-2.pdf)
+<img width="1084" height="621" alt="Screenshot 2026-03-02 at 10 07 16 PM" src="https://github.com/user-attachments/assets/3087a42c-961c-466b-a790-5934b2a0afd4" />
 
 # Before we get started
 
