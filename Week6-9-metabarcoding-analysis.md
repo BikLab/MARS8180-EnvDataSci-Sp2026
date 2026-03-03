@@ -1,3 +1,6 @@
+# Overview of metabarcoding workflow
+[MARS8180 Bioinformatics Workflows-2.pdf](https://github.com/user-attachments/files/25701411/MARS8180.Bioinformatics.Workflows-2.pdf)
+
 # Before we get started
 
 ### Transferring Data files
