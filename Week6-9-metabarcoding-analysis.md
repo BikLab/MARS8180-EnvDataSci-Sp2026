@@ -482,6 +482,10 @@ Let's install and import the R packages we are going to use for our downstream a
 ---
 #### Removing Contaminant Sequences
 
+For current best practices and guidance regarding contamination in -Omics datasets, the following paper provides a very comprehensive overview of all the things you need to be thinking about:
+
+Fierer et al. (2025) Guidelines for preventing and reporting contamination in low biomass studies. _Nature Microbiology_, 10: 1570-1580. https://www.nature.com/articles/s41564-025-02035-2
+
 Early paper raising awareness of the "kit microbiome" and potential contamination in -Omics sequencing:
 
 Salter et al. (2014) Reagent and laboratory contamination can critically impact sequence-based microbiome analyses, *BMC Biology*, 12:87 - https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-014-0087-z
