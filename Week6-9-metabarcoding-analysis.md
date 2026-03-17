@@ -633,8 +633,7 @@ How contaminant removal works - below figure is from Davis et al. (2018) Simple 
 
 A nice introduction to the decontam software tool is also available here: https://benjjneb.github.io/decontam/vignettes/decontam_intro.html
 
----****
-
+---
 
 ## Filter out contaminatns using Decontam’s prevelance method. For more information see <https://github.com/benjjneb/decontam>
 
