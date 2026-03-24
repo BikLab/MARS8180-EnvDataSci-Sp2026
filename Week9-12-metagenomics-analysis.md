@@ -139,5 +139,118 @@ Now, we can rerun FASTQC and MultiQC to assess whether our trimming parameters i
 
 The files are called `04-fastqc-trimmed.sh` and `05-multiqc-trimmed.sh`
 
+### Assembling contigs 
+Now, we can assemble our quality-controlled data using Megahit.  
 
+
+```
+$ cat scripts/06-assembly-megahit.sh
+
+#!/bin/sh
+#SBATCH --job-name="megahit"
+#SBATCH --partition=highmem
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=24
+#SBATCH --mem-per-cpu=30G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e 07-megahit.err-%N
+#SBATCH -o 07-megahit.out-%N
+
+module load MEGAHIT
+
+INPUT=/work/mars8180/instructor_data/metagenomics/analysis/03-trimmomatic
+OUTPUT=//work/mars8180/instructor_data/metagenomics/analysis/06-assembly
+
+mkdir -p ${OUTPUT}
+megahit -1 ${INPUT}/tricoma_059_AQ_202303_R1_paired.fastq.gz \
+    -2 ${INPUT}/tricoma_059_AQ_202303_R2_paired.fastq.gz \
+    -o ${OUTPUT}/tricoma_059_AQ_202303 -t 24 --presets meta-sensitive --min-contig-len 1000
+```
+
+Here, we will use a present called `meta-sensitive` with predefined set of kmers that work best for assembling low diversity samples. We will also specify a minimum contig length of 1,000 (anything less than 1,000bp is not useful for binning or functional annotation). 
+
+### Read map our samples
+
+After assembling our contigs, we can read map our quality-controlled data to our contigs to get abundance information for each contig. This will help us bin our samples into metagenome-assembled genomes. We will use two tools for this: BWA and SAMtools. 
+
+```
+$ cat scripts/07-read-map-reads.sh
+
+#!/bin/bash
+
+#SBATCH --job-name="read-map"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=32
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e read-map.err-%N
+#SBATCH -o read-map.out-%N
+
+# path variables and modules
+module load BWA
+module load SAMtools
+
+CONTIGS=/work/mars8180/instructor_data/metagenomics/analysis/06-assembly/tricoma_059_AQ_202303/final.contigs.fa
+READS=/work/mars8180/instructor_data/metagenomics/analysis/03-trimmomatic
+OUTPUT=/work/mars8180/instructor_data/metagenomics/analysis/07-read-map
+
+mkdir -p ${OUTPUT}
+
+bwa index ${CONTIGS}
+bwa mem -t 32 ${CONTIGS} ${READS}/tricoma_059_AQ_202303_R1_paired.fastq.gz ${READS}/tricoma_059_AQ_202303_R2_paired.fastq.gz | samtools sort -o ${OUTPUT}/tricoma_059_AQ_202303-alignment.bam --threads 32
+samtools index -@ 32 ${OUTPUT}/tricoma_059_AQ_202303-alignment.bam
+```
+
+When we assemble our genome we lose quantitative information. We can map our reads back to the assembly to determine the relative abundance of each contig in the sample. This is important because we can use this information to bin our sequences into metagenome-assembled genomes (MAGs) - sequences that come from the same organisms should be present in roughly equal proportions.
+
+We will use two tools - BWA and SAMTools - to read map our samples. BWA will map short-reads to the assembly. After we will sort the BAM file and index it for rapid random access.
+
+BWA (Li et al. 2009, Fast and accurate short read alignment with Burrows–Wheeler transform - [https://academic.oup.com/bioinformatics/article/25/14/1754/225615?login=false]())
+
+SamTools (Danecek et al. 2021, Twelve years of SAMtools and BCFtools - [https://academic.oup.com/gigascience/article/10/2/giab008/6137722?login=false]())
+
+To read map our samples, we 1) index our assembly, 2) read map using BWA, 3) sort to SAM file and convert to BAM, and 4) index the sorted BAM file.
+
+### Binning MAGs
+
+```
+$ cat scripts/08-bin-mags.sh
+
+#!/bin/bash
+
+#SBATCH --job-name="metabat"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=24
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e metabat.err-%N
+#SBATCH -o metabat.out-%N
+
+# path variables and modules
+module load MetaBAT
+
+CONTIGS=/work/mars8180/instructor_data/metagenomics/analysis/06-assembly/tricoma_059_AQ_202303/final.contigs.fa
+MAP=/work/mars8180/instructor_data/metagenomics/analysis/07-read-map/tricoma_059_AQ_202303-alignment.bam
+OUTPUT=/work/mars8180/instructor_data/metagenomics/analysis/08-metagenome-bins
+
+mkdir ${OUTPUT}
+jgi_summarize_bam_contig_depths --outputDepth ${OUTPUT}/tricoma_059_AQ_202303-depth.txt ${MAP}
+metabat2 -i ${CONTIGS} -a ${OUTPUT}/tricoma_059_AQ_202303-depth.txt -o ${OUTPUT}/tricoma_059_AQ_202303 -t 24
+```
+
+
+We are able to use our abundance information to bin bacterial contigs into metagenome-assembled genomes. We are going to use a single tool to bin our datasets: MetaBat2. MetaBat2 uses tetranucleotide frequencies in conjunction with abundance information for genome reconstruction. 
+
+MetaBat2 (Kang et al. 2019, MetaBAT 2: an adaptive binning algorithm for robust and efficient genome reconstruction from metagenome assemblies - [https://peerj.com/articles/7359/]())
 
