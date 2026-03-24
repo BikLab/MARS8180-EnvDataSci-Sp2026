@@ -300,3 +300,19 @@ We are able to use our abundance information to bin bacterial contigs into metag
 
 MetaBat2 (Kang et al. 2019, MetaBAT 2: an adaptive binning algorithm for robust and efficient genome reconstruction from metagenome assemblies - [https://peerj.com/articles/7359/]())
 
+## DAStool 
+
+![image](https://github.com/user-attachments/assets/d6cd0bbb-ed5c-42df-8625-76b8963998d0)
+
+* Step 1: The DasTool inputs are the bins output by each binning algorith. 
+* Step 2: Single-copy genes are predicted and the bins are scored according to completeness and contamination.
+* Step 3: Bins that were predicted by multiple binning algorithms are dereplicated.
+* Step 4: There is an iterative selection of "best" bins and the partial candidate bins are selected. The output are a non-redundant set of the high-scoring bins from predicted by different binning algorithms.
+
+To run DASTool we first need to make a list of contigs that belong to each bin. Afterwards we can compare the assemblies and choose the best one. We can set the score-threshold to 0 to force it to bin incomplete MAGs (low completion according to single-copy genes). 
+
+```
+Fasta_to_Contig2Bin.sh -i metabat-bins -e fa > metabat-summary.txt
+Fasta_to_Contig2Bin.sh -i comebin-bins -e fa > comebin-summary.txt
+Rscript DAS_Tool.R -i comebin-summary.txt,metabat-summary.txt -l comebin,metabat -c final.contigs.fa -o dastool-bins --write_bins --write_bin_evals -t 12 --score_threshold=0
+```
