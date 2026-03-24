@@ -139,6 +139,38 @@ Now, we can rerun FASTQC and MultiQC to assess whether our trimming parameters i
 
 The files are called `04-fastqc-trimmed.sh` and `05-multiqc-trimmed.sh`
 
+## Metagenome Assemblies
+
+#### Important Definitions:
+
+* **Kmers:** A substring of a sequence of the length K 
+	
+	Take the sequence ATGCTGCT as an example. This sequence can be broken up into several substrings (or subsequences) of length 4 (tetramer or 4-mer).
+	* ATGC
+	* TGCT
+	* GCTG
+	* CTGC
+	* TGCT
+
+	This is useful because we can count how many unique and total kmers we find in a sequence and quickly compare them to other sequences. In the example above, there are 5 tetramers (4 unique tetramers). This is useful because alignment algorithms require a lot of resources - the computational time and memory required grow exponentially for each added sequence. Using the same example above, there are only 256 (4^4) unique tetramers. If we increase the size of the kmer, we have more unique kmer combination but fewer overlapping substrings. Even BLAST utilizes Kmers (default size 28; 4^28 unique combinations) to identify exact matches across the entire NCBI database (>3.7 billion sequences). 
+
+* **De Bruijn Graphs:** Graph theory underpin many -omics assembly methods. De brujin graphs are old - they were first developed in 1946 by the Mathmatecian Nicolaas de Brujin. In short they are a directed graph-based method of visualizing and assembling sequence data. You take your kmers and connect them if they overlap. Afterwards, you can follow all your overlapping sequences to identify assembled contigs. **Most modern assemblers are based on De Bruijn Graphs**, although older tools can use other methods such as the Naïve approach, Greedy approach, or Overlap Layout Consensus.
+
+<img width="1294" alt="Screenshot 2025-03-20 at 8 58 40 AM" src="https://github.com/user-attachments/assets/aaa54f12-a53c-4aff-8bc6-75e0bf378c52" />
+
+What a De Bruijn Graph actually looks like (visualization of the underlying math - Image from Wikipedia https://en.wikipedia.org/wiki/De_Bruijn_graph) 
+
+How this actually works in practice: https://www.youtube.com/watch?v=OY9Q_rUCGDw 
+
+## Assembling Short-Read Sequences
+
+Two most popular metagenome assemblers for Illumina short read sequences: 
+
+* **MEGAHIT** (Li et al. 2015, MEGAHIT: an ultra-fast single-node solution for large and complex metagenomics assembly via succinct de Bruijn graph https://academic.oup.com/bioinformatics/article/31/10/1674/177884) 
+* **metaSPAdes** (Nurk et al. 2017, metaSPAdes: a new versatile metagenomic assembler - https://genome.cshlp.org/content/27/5/824)
+
+There are several tools you can use to assembly short-read metagenomics, but we are going to implement MegaHit for three main reasons: 1) it is incredibly fast, 2) it requires less computational resources, and 3) assembles metagenomic datasets fairly well. 
+
 ### Assembling contigs 
 Now, we can assemble our quality-controlled data using Megahit.  
 
@@ -218,7 +250,21 @@ SamTools (Danecek et al. 2021, Twelve years of SAMtools and BCFtools - [https://
 
 To read map our samples, we 1) index our assembly, 2) read map using BWA, 3) sort to SAM file and convert to BAM, and 4) index the sorted BAM file.
 
-### Binning MAGs
+### Binning Metagenome-assembled Genomes (MAGs)
+
+We are now able to use our abundance information to bin bacterial contigs into metagenome-assembled genomes. We are going to use three tools 1) MetaBat2, 2) comebin, and 3) dastool. Both MetaBat2 and Comebin use tetranucleotide frequencies in conjunction with abundance information for genome reconstruction. However, Comebin uses a contrastive multi-view representation learning to determine the best MAGs and incorporates single-copy gene information and contig length. Finally, Dastool compares the MAGs produced by any binning algorithm and determine the most complete MAGs (with least amount of contamination). 
+
+* **MetaBat2** (Kang et al. 2019, MetaBAT 2: an adaptive binning algorithm for robust and efficient genome reconstruction from metagenome assemblies - [https://peerj.com/articles/7359/](https://peerj.com/articles/7359/))
+* **Comebin** (Wang et al. 2024, Effective binning of metagenomic contigs using contrastive multi-view representation learning - [https://www.nature.com/articles/s41467-023-44290-z](https://www.nature.com/articles/s41467-023-44290-z))
+* **Dastool** (Sieber et al. 2018, Recovery of genomes from metagenomes via a dereplication, aggregation and scoring strategy - [https://www.nature.com/articles/s41564-018-0171-1](https://www.nature.com/articles/s41564-018-0171-1))
+
+## MetaBat2
+
+![peerj-03-1165-g001](https://github.com/user-attachments/assets/d3604d96-0238-42dd-a283-4590f7fae801)
+
+The figure above is from the MetaBat1 software; howwever, MetaBat2 works similarly, except that it is iterative and chooses the best parameters according to your dataset. It does not require to make any decisions about which parameters would be best suited for your dataset. Additionally, MetaBat2 constructs a graph using the tetranucleotide frequency and read abundance to cluster contigs that appear to be similar in structure. 
+
+For MetaBat2, we are first going to summarize our BAM file and then reconstruct the genomes.
 
 ```
 $ cat scripts/08-bin-mags.sh
