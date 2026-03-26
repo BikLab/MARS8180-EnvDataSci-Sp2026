@@ -312,7 +312,119 @@ MetaBat2 (Kang et al. 2019, MetaBAT 2: an adaptive binning algorithm for robust 
 To run DASTool we first need to make a list of contigs that belong to each bin. Afterwards we can compare the assemblies and choose the best one. We can set the score-threshold to 0 to force it to bin incomplete MAGs (low completion according to single-copy genes). 
 
 ```
-Fasta_to_Contig2Bin.sh -i metabat-bins -e fa > metabat-summary.txt
-Fasta_to_Contig2Bin.sh -i comebin-bins -e fa > comebin-summary.txt
-Rscript DAS_Tool.R -i comebin-summary.txt,metabat-summary.txt -l comebin,metabat -c final.contigs.fa -o dastool-bins --write_bins --write_bin_evals -t 12 --score_threshold=0
+#!/bin/bash
+
+#SBATCH --job-name="dastool"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e dastool.err-%N
+#SBATCH -o dastool.out-%N
+
+# path variables and modules
+module load Miniforge3
+source activate /home/ad14556/dastool
+
+CONTIGS=/work/mars8180/instructor_data/metagenomics/analysis/06-assembly/tricoma_059_AQ_202303/final.contigs.fa
+MAP=/work/mars8180/instructor_data/metagenomics/analysis/07-read-map
+METABAT=/work/mars8180/instructor_data/metagenomics/analysis/08-metagenome-bins
+OUTPUT=/work/mars8180/instructor_data/metagenomics/analysis/09-dastool
+
+mkdir -p ${OUTPUT}
+Fasta_to_Contig2Bin.sh -i ${METABAT} -e fa > ${OUTPUT}/tricoma_059_AQ_202303-metabat-scaffolds2bin.tsv
+DAS_Tool -i ${OUTPUT}/tricoma_059_AQ_202303-metabat-scaffolds2bin.tsv \
+  -l metabat \
+  -c ${CONTIGS} \
+  -o ${OUTPUT}/tricoma_059_AQ_202303 \
+  --write_bins \
+  --write_bin_evals \
+  -t 12 \
+  --score_threshold=0.5
+```
+
+## Assessing Bin quality using CheckM2
+
+In 2017, two standards were developed by the Genomic Standards Consortium (GSC) for reporting bacterial and archaeal genome sequences. MAGs are classified on different classification levels depending on the completion and contamination determined using single-copy genes.
+
+* **Finished Single Contig MAG**: >90% complete with less than 5% contamination. Genomes in this category should be a single contiguous sequence and also encode the 23S, 16S, and 5S rRNA genes, and tRNAs for at least 18 of the 20 possible amino acids
+* **High-quality MAG**: >90% complete with less than 5% contamination. Genomes in this category should also encode the 23S, 16S, and 5S rRNA genes, and tRNAs for at least 18 of the 20 possible amino acids.
+* **Medium-quality MAG**: ≥50% complete and less than 10% contamination.
+* **Low-quality MAG**: <50% complete with <10% contamination.
+
+It should be noted that there is no minumum assembly size since genomes smaller than 200 kb have been reported. Additionally assembly statistics are usually reported when depositing sequences (N50, L50, largest contig, number of contigs, assembly size, percentage of reads that map back to the assembly, and number of predicted genes per genome).
+
+**Bowers et al. (2017) Minimum information about a single amplified genome (MISAG) and a metagenome-assembled genome (MIMAG) of bacteria and archaea [https://www.nature.com/articles/nbt.3893]()**
+
+We will use the software program CheckM2 to determine the quality of the MAGs:
+
+* Chklovski A, Parks DH, Woodcroft BJ, Tyson GW (2023) CheckM2: a rapid, scalable and accurate tool for assessing microbial genome quality using machine learning. Nature Methods, 20: 1203-1212 - [https://www.nature.com/articles/s41592-023-01940-w]()
+
+It uses two machine learning models to determine the quality depending on wether the genome is novel or if it is closely related to a genome in the training set. These two machine learning methods are:
+
+1. **Gradient boosted decision trees**: Ke, G. et al. Lightgbm: A highly efficient gradient boosting decision tree. Adv. Neural Inf. Process. Syst. 30, 3146–3154 (2017)
+2. **Artifical Neural Networks**: Abadi, M. et al. Tensorflow: a system for large-scale machine learning. In Proc. 12th USENIX Symposium on Operating Systems Design and Implementation (OSDI 16) 265–283 (2016)
+
+We can run CheckM2 with the following script:
+
+```
+cat scripts/10-checkm2.sh
+
+#!/bin/bash
+
+#SBATCH --job-name="checkm"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=24
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e checkm.err-%N
+#SBATCH -o checkm.out-%N
+
+# path variables and modules
+module load CheckM2
+
+BINS=/work/mars8180/instructor_data/metagenomics/analysis/09-dastool/tricoma_059_AQ_202303_DASTool_bins
+OUTPUT=/work/mars8180/instructor_data/metagenomics/analysis/10-checkm2
+DATABASE=/work/mars8180/instructor_data/metagenomics/database/checkm2/uniref100.KO.1.dmnd
+
+mkdir ${OUTPUT}
+checkm2 predict --force -x .fa --threads 24 --database_path ${DATABASE} --input ${BINS} --output-directory ${OUTPUT}
+```
+
+## Classifying MAGs with GTDB-tk
+To identify taxonomically classify the the bacterial bins, we can use the GTDB-tk. This tool will identify single-copy genes and place them on a phylogenetic tree. It will out put a text file with the taxonomic id of each bin
+
+```
+cat scripts/11-gtdbtk.sh
+
+#!/bin/bash
+
+#SBATCH --job-name="gtdb-tk"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=30
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e gtdb-tk.err-%N
+#SBATCH -o gtdb-tk.out-%N
+
+# path variables and modules
+module load GTDB-Tk/2.4.1-foss-2023a
+
+BINS=/work/mars8180/instructor_data/metagenomics/analysis/09-dastool/tricoma_059_AQ_202303_DASTool_bins
+OUTPUT=/work/mars8180/instructor_data/metagenomics/analysis/11-gtdbtk
+
+mkdir ${OUTPUT}
+gtdbtk classify_wf --genome_dir ${BINS} --out_dir ${OUTPUT} --skip_ani_screen -x fa --cpus 24 --pplacer_cpus 24
 ```
