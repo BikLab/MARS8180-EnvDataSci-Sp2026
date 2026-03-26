@@ -369,6 +369,9 @@ It uses two machine learning models to determine the quality depending on wether
 1. **Gradient boosted decision trees**: Ke, G. et al. Lightgbm: A highly efficient gradient boosting decision tree. Adv. Neural Inf. Process. Syst. 30, 3146–3154 (2017)
 2. **Artifical Neural Networks**: Abadi, M. et al. Tensorflow: a system for large-scale machine learning. In Proc. 12th USENIX Symposium on Operating Systems Design and Implementation (OSDI 16) 265–283 (2016)
 
+<img width="393" height="287" alt="Screenshot 2026-03-26 at 1 00 20 PM" src="https://github.com/user-attachments/assets/8fd84081-7fa7-4046-90c6-cfcd645bdb89" />
+
+
 We can run CheckM2 with the following script:
 
 ```
