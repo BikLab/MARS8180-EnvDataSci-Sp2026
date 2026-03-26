@@ -431,3 +431,17 @@ OUTPUT=/work/mars8180/instructor_data/metagenomics/analysis/11-gtdbtk
 mkdir ${OUTPUT}
 gtdbtk classify_wf --genome_dir ${BINS} --out_dir ${OUTPUT} --skip_ani_screen -x fa --cpus 24 --pplacer_cpus 24
 ```
+
+## METABOLIC
+
+There are other tools that are not available via Anvi'o that allow you to predict metabolic and biogeochemical functional trait from metagenomic data. One of the tools is METABOLIC. The genomic datasets can either be metagenome-assembled genomes (MAGs), single-cell amplified genomes (SAGs) or isolated strain sequenced genomes. There are two programs we can run with METABOLIC - METABOLIC-C and METABOLIC-G. 
+
+GitHub: [https://github.com/AnantharamanLab/METABOLIC](https://github.com/AnantharamanLab/METABOLIC)
+
+### METABOLIC-G.pl	
+> Allows for classification of the metabolic capabilities of input genomes.
+
+### METABOLIC-C.pl	
+> Allows for classification of the metabolic capabilities of input genomes,
+> calculation of genome coverage, creation of biogeochemical cycling diagrams,
+> and visualization of community metabolic interactions and contribution to biogeochemical processes by each microbial group.
