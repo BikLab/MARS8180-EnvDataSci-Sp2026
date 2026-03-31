@@ -492,15 +492,16 @@ scp -r UGAID@txfer.gacrc.uga.edu:/work/mars8180/instructor_data/metagenomics/dat
 scp UGAID@txfer.gacrc.uga.edu:"/work/mars8180/instructor_data/metagenomics/scripts/13*" /path/to/directory/scripts/
 ```
 
-First we need to request an interactive node, create a Conda Directory, and install SingleM 
+First we need to request an interactive node, create a Conda Directory, and install SingleM in the home directory.
 
 ```
 interact --mem=16G
+cd /home/userid
 
 module load Miniforge3
 mkdir singleM
 conda create -p singleM
-source activate singleM
+source activate /home/userid/singleM
 conda install bioconda::singlem
 ```
 
