@@ -445,3 +445,142 @@ GitHub: [https://github.com/AnantharamanLab/METABOLIC](https://github.com/Ananth
 > Allows for classification of the metabolic capabilities of input genomes,
 > calculation of genome coverage, creation of biogeochemical cycling diagrams,
 > and visualization of community metabolic interactions and contribution to biogeochemical processes by each microbial group.
+
+Let's submit the script:
+
+```
+cat 12-metabolic.sh
+
+#!/bin/sh
+
+#SBATCH --job-name="metabolic"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=24
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=END,FAIL
+#SBATCH -e metabolic.err-%N
+#SBATCH -o metabolic.out-%N
+
+#Path Variables
+module load HMMER
+module load METABOLIC
+module load GTDB-Tk
+
+INPUT=/work/mars8180/instructor_data/metagenomics/analysis/09-dastool/tricoma_059_AQ_202303_DASTool_bins
+OUTPUT=/work/mars8180/instructor_data/metagenomics/analysis/12-metabolic/
+
+mkdir -p ${OUTPUT}/input
+mkdir -p ${OUTPUT}/output
+
+cp ${INPUT}/*.fa ${OUTPUT}/input
+rename ".fa" ".fasta" ${OUTPUT}/input/*
+
+METABOLIC-G.pl -p meta -t 24 -in-gn ${OUTPUT}/input -o ${OUTPUT}/output
+```
+
+## Taxonomic classification of community using SingleM
+
+Let's copy the scripts and databases from the instructor data
+
+```
+scp -r UGAID@txfer.gacrc.uga.edu:/work/mars8180/instructor_data/metagenomics/database/singlem/S5.4.0.GTDB_r226.metapackage_20250331.smpkg.zb /path/to/directory/singlem/
+
+scp UGAID@txfer.gacrc.uga.edu:"/work/mars8180/instructor_data/metagenomics/scripts/13*" /path/to/directory/scripts/
+```
+
+First we need to request an interactive node, create a Conda Directory, and install SingleM 
+
+```
+interact --mem=16G
+
+module load Miniforge3
+mkdir singleM
+conda create -p singleM
+source activate singleM
+conda install bioconda::singlem
+```
+
+Now, we have to install the krona taxonomy: 
+
+```
+mkdir /directory/krona
+ktUpdateTaxonomy.sh /path/to/db
+```
+
+We can run SingleM and output a taxo
+
+```
+cat 13A-singleM-pipe.sh
+
+#!/bin/sh
+
+#SBATCH --job-name="singleM-pipe"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=24
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=END,FAIL
+#SBATCH -e singleM-pipe.err-%N
+#SBATCH -o singleM-pipe.out-%N
+
+#Path Variables
+module load Miniforge3
+source activate /home/ad14556/singleM
+
+READ1=/work/mars8180/instructor_data/metagenomics/raw-data/tricoma_059_AQ_202303_R1.fastq.gz
+READ2=/work/mars8180/instructor_data/metagenomics/raw-data/tricoma_059_AQ_202303_R2.fastq.gz
+OUTPUT=/work/mars8180/instructor_data/metagenomics/analysis/13-singlem
+
+mkdir ${OUTPUT}
+
+# export database to an internal variable used by the software
+export SINGLEM_METAPACKAGE_PATH='/work/mars8180/instructor_data/metagenomics/database/singlem/S5.4.0.GTDB_r226.metapackage_20250331.smpkg.zb'
+singlem pipe -1 ${READ1} \
+  -2 ${READ2} \
+  -p ${OUTPUT}/tricoma_059_AQ_202303.profile \
+  --taxonomic-profile-krona ${OUTPUT}/tricoma_059_AQ_202303.html \
+  --threads 24
+```
+
+First we export the path of the database to a variable used internally by the software `SINGLEM_METAPACKAGE_PATH `. After, we can use singlem pipe to taxonomically classify the forward and reverse reads and export the results into a text files called `tricoma_059_AQ_202303.tsv`. We will output the results in a graphical output called a krona chart `tricoma_059_AQ_202303.html` that we can view and interact on a browser.	
+
+However, to compare these across samples using other software packages (in R), we can transform them into relative abundance at a specific taxonomic level using the subcommand summarise: 
+
+```
+cat scripts/13B-singleM-relab.sh
+
+#!/bin/sh
+
+#SBATCH --job-name="singleM-relab"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=24
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=END,FAIL
+#SBATCH -e singleM-relab.err-%N
+#SBATCH -o singleM-relab.out-%N
+
+#Path Variables
+module load Miniforge3
+source activate /home/ad14556/singleM
+
+INPUT=/work/mars8180/instructor_data/metagenomics/analysis/13-singlem/tricoma_059_AQ_202303.profile
+OUTPUT=/work/mars8180/instructor_data/metagenomics/analysis/13-singlem//tricoma_059_AQ_202303-relab.profile
+
+# export database to an internal variable used by the software
+singlem summarise --input-taxonomic-profile ${INPUT} \
+    --output-species-by-site-relative-abundance ${OUTPUT} \
+    --output-species-by-site-level order
+```
+
+
