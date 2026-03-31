@@ -511,7 +511,7 @@ mkdir /directory/krona
 ktUpdateTaxonomy.sh /path/to/db
 ```
 
-We can run SingleM and output a taxo
+We can run SingleM and output a taxonomy profile and krona chart.
 
 ```
 cat 13A-singleM-pipe.sh
