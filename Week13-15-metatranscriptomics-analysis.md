@@ -1,5 +1,7 @@
 <img width="1182" height="665" alt="Screenshot 2026-03-02 at 10 09 14 PM" src="https://github.com/user-attachments/assets/fe700b94-e796-4617-9719-57db94b6ea2d" />
 
+https://private-user-images.githubusercontent.com/27451655/431037610-4042a01f-a783-4b37-8c98-97de36bbc751.jpg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzUxNTIyMDcsIm5iZiI6MTc3NTE1MTkwNywicGF0aCI6Ii8yNzQ1MTY1NS80MzEwMzc2MTAtNDA0MmEwMWYtYTc4My00YjM3LThjOTgtOTdkZTM2YmJjNzUxLmpwZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA0MDIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNDAyVDE3NDUwN1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWZlMWZlNGI5MDQwN2Q4NWYzZjExYWExNjMzMWJmNmM0ZDI0ZGMwNjdlOTQ2NzY1MTBhMjdmZGU3ODM0Y2IzNzAmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.mGHx8J7Mkb-kg32rl02Klrjc0IMHpfn-0XA-00aKNlw
+
 # Metatranscriptomic data
 This week, we will be spending time analyzing a small subset of samples (from 2 stations) that were collected as part of the Tara Oceans Project. There are a total of 12 samples (6 from station TARA_135 and 6 from station TARA_137):
 
