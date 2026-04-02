@@ -505,7 +505,7 @@ source activate /home/userid/singleM
 conda install bioconda::singlem
 ```
 
-Now, we have to install the krona taxonomy: 
+Now, we have to install the krona taxonomy. After you 1) request an interactivate node and 2) activate the singleM conda environment you can use the following commands to download the krona taxonomy database. 
 
 ```
 mkdir /directory/krona
