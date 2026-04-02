@@ -509,7 +509,7 @@ Now, we have to install the krona taxonomy:
 
 ```
 mkdir /directory/krona
-ktUpdateTaxonomy.sh /path/to/db
+ktUpdateTaxonomy.sh /directory/krona
 ```
 
 We can run SingleM and output a taxonomy profile and krona chart.
