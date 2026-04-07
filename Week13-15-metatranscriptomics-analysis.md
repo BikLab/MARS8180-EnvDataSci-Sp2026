@@ -156,3 +156,87 @@ This will iterate the same command for each sample.
 ## Visualizing data quality
 
 Now run the scripts `04-fastqc.sh` and `05-multiqc.sh` to assess the quality of the quality trimmed data. 
+
+## Assembling data
+
+Simliar to the metagenomics dataset, we are going to use MegaHit to assembled our transcriptomic data. However, this time we have multiple Fastq files, so we will have to write this using a loop.
+
+```
+$ cat 06-megahit.sh
+
+#!/bin/sh
+#SBATCH --job-name="megahit"
+#SBATCH --partition=highmem
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=24
+#SBATCH --mem-per-cpu=15G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e 06-megahit.err-%N
+#SBATCH -o 06-megahit.out-%N
+
+module load MEGAHIT/1.2.9-GCCcore-13.3.0
+
+INPUT=/work/mars8180/instructor_data/metatranscriptomics/analysis/03-trimmomatic
+OUTPUT=/work/mars8180/instructor_data/metatranscriptomics/analysis/06-assembly
+
+mkdir -p ${OUTPUT}
+
+for file in ${INPUT}/*_R1_paired.fastq.gz; do
+  base=$(basename ${file} _R1_paired.fastq.gz)
+  megahit --k-min 21 --k-max 111 -m 0.9 -t 24 -1 ${INPUT}/${base}_R1_paired.fastq.gz -2 ${INPUT}/${base}_R2_paired.fastq.gz \
+    -f -o ${OUTPUT}/${base}
+done
+```
+
+We will following recommendations by Krinnos et al and maintain a kmer size range from 21-111. 
+
+1. **Use the `basename` command to create a variable with the sample name.** This remove the path information and any patterns. In this case we want to remove `_1.fastq.gz` and only keep the sample names.
+2. **Run `Megahit`**. We will use the input path and the new variable `${base}` to specify the sample names. 
+3. Done 
+
+## Assess Assembly Quality
+
+We are going to use a new tool, QUAST, to assess how well the data assembled. QUAST is agnostic to datatype, so you can also use this for metagenomic datasets. 
+
+```
+$ cat 07-quast.sh
+
+#!/bin/sh
+#SBATCH --job-name="quast"
+#SBATCH --partition=batch
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16
+#SBATCH --mem-per-cpu=5G
+#SBATCH --time=7-00:00:00
+#SBATCH --mail-user=ad14556@uga.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH -e 07-quast.err-%N
+#SBATCH -o 07-quast.out-%N
+
+module load QUAST/5.2.0-gfbf-2023b
+
+ASSEMBLY=/work/mars8180/instructor_data/metatranscriptomics/analysis/06-assembly
+OUTPUT=/work/mars8180/instructor_data/metatranscriptomics/analysis/07-quast
+
+mkdir -p ${OUTPUT}
+
+for folder in ${ASSEMBLY}/*; do
+  base=$(basename ${folder})
+  quast ${ASSEMBLY}/${base}/final.contigs.fa -o ${OUTPUT}/${base} --threads 16
+done
+```
+
+Quant is an easy-to-use software that estimates assembly statistics, such as:
+
+* Number of Contigs
+* Length of the Assembly
+* N50
+* N90
+* L50
+* L90
+* GC%
+
